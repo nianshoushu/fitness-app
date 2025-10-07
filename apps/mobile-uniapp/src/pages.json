@@ -1,0 +1,8 @@
+{
+  "pages": [
+    { "path": "pages/auth/login", "style": { "navigationBarTitleText": "登录" } },
+    { "path": "pages/index/index", "style": { "navigationBarTitleText": "首页" } },
+    { "path": "pages/meal/add",   "style": { "navigationBarTitleText": "记录饮食" } }
+  ],
+  "window": { "navigationBarTitleText": "Fitness" }
+}

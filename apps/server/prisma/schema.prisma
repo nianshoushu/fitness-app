@@ -1,0 +1,58 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id             String           @id @default(cuid())
+  phone          String           @unique
+  password       String
+  nickname       String?
+  heightCm       Int?
+  weightKg       Float?
+  goal           String?
+  createdAt      DateTime         @default(now())
+  Meal           Meal[]
+  WorkoutSession WorkoutSession[]
+}
+
+model Food {
+  id        String     @id @default(cuid())
+  name      String     @unique // 你刚加的唯一约束保留
+  kcal      Int
+  protein   Float
+  fat       Float
+  carbs     Float
+  mealItems MealItem[] // ← 新增这行：指向 MealItem 的反向关系
+}
+
+model Meal {
+  id      String     @id @default(cuid())
+  userId  String
+  takenAt DateTime
+  items   MealItem[]
+  user    User       @relation(fields: [userId], references: [id])
+}
+
+model MealItem {
+  id     String @id @default(cuid())
+  mealId String
+  foodId String
+  grams  Float
+  meal   Meal   @relation(fields: [mealId], references: [id])
+  food   Food   @relation(fields: [foodId], references: [id])
+}
+
+model WorkoutSession {
+  id        String   @id @default(cuid())
+  userId    String
+  date      DateTime
+  type      String
+  durationM Int
+  reps      Int?
+  user      User     @relation(fields: [userId], references: [id])
+}

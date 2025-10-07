@@ -1,0 +1,45 @@
+@base = http://localhost:3000
+@token =eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjbWdnbWtueXUwMDAwdmN5czk4aHo5ZjNyIiwicGhvbmUiOiIxMzgwMDAwMDAwMCIsImlhdCI6MTc1OTg0NTUxNSwiZXhwIjoxNzYwNDUwMzE1fQ.G3jyRyBojrPvtwmjoWR7PThV0TbUMHSzxxZIIDKW5jw
+@foodId =cmggk30ra0002vccgdbc5v5ds
+@now = {{$datetime iso8601}}
+
+### 健康
+GET {{base}}/health
+
+### 注册（幂等）
+POST {{base}}/auth/register
+Content-Type: application/json
+
+{
+  "phone": "13800000000",
+  "password": "123456"
+}
+
+### 登录
+POST {{base}}/auth/login
+Content-Type: application/json
+
+{
+  "phone": "13800000000",
+  "password": "123456"
+}
+
+### 我是谁（把登录返回的 token 粘到上面的 @token 后面）
+GET {{base}}/user/me
+Authorization: Bearer {{token}}
+
+### 记一顿饭（示例：米饭 150g）——把上面的 @foodId 填成你库里某条 Food 的 id
+POST {{base}}/meals
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "takenAt": "{{now}}",
+  "items": [
+    { "foodId": "{{foodId}}", "grams": 150 }
+  ]
+}
+
+### 今日统计
+GET {{base}}/stats/today
+Authorization: Bearer {{token}}
